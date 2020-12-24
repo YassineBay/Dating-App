@@ -29,6 +29,10 @@ namespace Dating_App
         {
             services.AddDbContext<ApplicationContext>(option => option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
+            services.AddCors(options => {
+                options.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin()
+                                                                   .AllowAnyMethod()
+                                                                    .AllowAnyHeader()); });
 
         }
 
@@ -39,6 +43,8 @@ namespace Dating_App
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors("CorsPolicy"); // To allow us access Angular app
 
             app.UseHttpsRedirection();
 
