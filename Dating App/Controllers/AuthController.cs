@@ -28,6 +28,8 @@ namespace Dating_App.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody]UserForRegistrationDTO userToRegisterDTO)
         {
+            if(!string.IsNullOrEmpty(userToRegisterDTO.Username))
+                userToRegisterDTO.Username = userToRegisterDTO.Username.ToLower();
             //Validate Request
             if (await _repo.UserExists(userToRegisterDTO.Username))
                 ModelState.AddModelError("Username", "Username is already taken"); 
@@ -35,7 +37,7 @@ namespace Dating_App.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            userToRegisterDTO.Username = userToRegisterDTO.Username.ToLower();
+            
              
             var userToCreate = new User
             {
@@ -70,7 +72,7 @@ namespace Dating_App.Controllers
             var token = tokenHandler.CreateToken(tokenDescription);
             var tokenString = tokenHandler.WriteToken(token);
 
-            return Ok(tokenString);
+            return Ok(new { tokenString });
             
         }
         

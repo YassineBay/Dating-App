@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Dating_App.Controllers
 {
-    [Authorize]
+    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase
