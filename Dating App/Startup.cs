@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Dating_App.Data;
 using Dating_App.Extensions;
 using Dating_App.Helpers;
+using Dating_App.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -37,14 +38,14 @@ namespace Dating_App
         {
             services.AddApplicationServices(Configuration);
             services.AddIdentityServices(Configuration);
-            services.AddControllers(); 
+            services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddCors(options => {options.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()); });
-
+          
             
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env , Seed seeder)
         {
             if (env.IsDevelopment())
             {
@@ -72,14 +73,16 @@ namespace Dating_App
 
             app.UseHttpsRedirection();
 
+
             app.UseRouting();
+
+           // seeder.SeedUsers();
 
             app.UseCors("CorsPolicy"); // To allow us access Angular app
 
             app.UseAuthentication();
 
             app.UseAuthorization();
-
 
             app.UseEndpoints(endpoints =>
             {

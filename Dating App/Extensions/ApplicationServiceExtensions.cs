@@ -1,4 +1,6 @@
-﻿using Dating_App.Data;
+﻿using AutoMapper;
+using Dating_App.Data;
+using Dating_App.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +17,9 @@ namespace Dating_App.Extensions
         {
             services.AddDbContext<ApplicationContext>(option => option.UseSqlServer(config.GetConnectionString("DefaultConnection")));
             services.AddScoped<IAuthRepository, AuthRepository>(); //for each httpRequest it creates a new Instance of Repository is created
+            services.AddTransient<Seed>();
+            services.AddScoped<IDatingRepository<User>, DatingRepository>();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             return services;
         }
     }
